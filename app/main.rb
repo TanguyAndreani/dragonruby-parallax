@@ -1,5 +1,4 @@
-WIDTH = 1280
-HEIGHT = 720
+WIDTH, HEIGHT = 1280, 720
 
 def layers
   [
@@ -17,6 +16,6 @@ def tick args
     t = args.state.tick_count % (WIDTH / i)
     x_coord = t * i * -1
     args.outputs.sprites << [x_coord, 0, WIDTH, HEIGHT, f]
-    args.outputs.sprites << [WIDTH - 2 + x_coord, 0, WIDTH, HEIGHT, f]
+    args.outputs.sprites << [x_coord + (WIDTH - 2), 0, WIDTH, HEIGHT, f]
   end
 end
