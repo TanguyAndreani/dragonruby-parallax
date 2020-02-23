@@ -1,0 +1,6 @@
+devid=soykaf
+devtitle=Tanguy Andreani
+gameid=dragonruby-parallax
+gametitle=A simple DragonRuby parallax
+version=0.1
+icon=metadata/icon.png
