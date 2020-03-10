@@ -1,17 +1,15 @@
 WIDTH, HEIGHT = 1280, 720
 
-def layers
-  [
+LAYERS = [
     'layer1.png',
     'layer2.png',
     'layer3.png',
     'layer4.png',
     'layer5.png',
-  ].map { |s| "assets/#{s}" }
-end
+].map { |s| "assets/#{s}" }
 
 def tick args
-  layers.each_with_index do |f, i|
+  LAYERS.each_with_index do |f, i|
     i += 1
     t = args.state.tick_count % (WIDTH / i)
     x_coord = t * i * -1
