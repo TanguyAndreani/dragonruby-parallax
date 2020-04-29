@@ -1,5 +1,3 @@
-WIDTH, HEIGHT = 1280, 720
-
 LAYERS = [
     'layer1.png',
     'layer2.png',
@@ -9,11 +7,14 @@ LAYERS = [
 ].map { |s| "assets/#{s}" }
 
 def tick args
+  w = args.grid.right
+  h = args.grid.top
+
   LAYERS.each_with_index do |f, i|
     i += 1
-    t = args.state.tick_count % (WIDTH / i)
+    t = args.state.tick_count % (w / i)
     x_coord = t * i * -1
-    args.outputs.sprites << [x_coord, 0, WIDTH, HEIGHT, f]
-    args.outputs.sprites << [x_coord + (WIDTH - 2), 0, WIDTH, HEIGHT, f]
+    args.outputs.sprites << [x_coord, 0, w, h, f]
+    args.outputs.sprites << [x_coord + (w - 2), 0, w, h, f]
   end
 end
