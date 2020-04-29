@@ -33,9 +33,9 @@ def tick args
     args.state.xs[layer] += offset
     x_coord = args.state.xs[layer] % w
     args.outputs.sprites << [
-      [x_coord - (w - 2), 0, w, h, f],
+      [x_coord - (w - 1), 0, w, h, f],
       [x_coord, 0, w, h, f],
-      [x_coord + (w - 2), 0, w, h, f]
+      [x_coord + (w - 1), 0, w, h, f]
     ]
   end
 end
