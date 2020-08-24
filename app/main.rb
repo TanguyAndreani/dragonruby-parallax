@@ -2,24 +2,24 @@ require 'lib/arrows.rb'
 require 'lib/parallax.rb'
 
 LAYERS = [
-    'layer1.png',
-    'layer2.png',
-    'layer3.png',
-    'layer4.png',
-    'layer5.png',
+  'layer1.png',
+  'layer2.png',
+  'layer3.png',
+  'layer4.png',
+  'layer5.png',
 ].map { |s| "assets/#{s}" }
 
 def checkInput args
-    if args.inputs.keyboard.key_down.left
-        args.state.direction = -1
-    elsif args.inputs.keyboard.key_down.right
-        args.state.direction = 1
-    elsif args.inputs.keyboard.key_down.space && !args.state.direction.zero?
-        args.state.old_direction = args.state.direction
-        args.state.direction = 0
-    elsif args.inputs.keyboard.key_down.space
-        args.state.direction = args.state.old_direction
-    end
+  if args.inputs.keyboard.key_down.left
+    args.state.direction = -1
+  elsif args.inputs.keyboard.key_down.right
+    args.state.direction = 1
+  elsif args.inputs.keyboard.key_down.space && !args.state.direction.zero?
+    args.state.old_direction = args.state.direction
+    args.state.direction = 0
+  elsif args.inputs.keyboard.key_down.space
+    args.state.direction = args.state.old_direction
+  end
 end
 
 def tick args
