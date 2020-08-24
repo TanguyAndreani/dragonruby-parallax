@@ -17,9 +17,11 @@ def checkInput args
   elsif args.inputs.keyboard.key_down.right
     args.state.direction = 1
   elsif args.inputs.keyboard.key_down.space && !args.state.direction.zero?
+    # save direction and stop
     args.state.old_direction = args.state.direction
     args.state.direction = 0
   elsif args.inputs.keyboard.key_down.space
+    # restore saved direction
     args.state.direction = args.state.old_direction
   end
 end
