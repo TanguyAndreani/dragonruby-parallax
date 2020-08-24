@@ -10,6 +10,8 @@ LAYERS = [
 ].map { |s| "assets/#{s}" }
 
 def checkInput args
+  args.state.direction ||= 1
+
   if args.inputs.keyboard.key_down.left
     args.state.direction = -1
   elsif args.inputs.keyboard.key_down.right
@@ -23,12 +25,19 @@ def checkInput args
 end
 
 def tick args
-  args.state.direction ||= 1
-
+  # sets args.state.direction
   checkInput args
 
   args.outputs.primitives << [
-    Parallax.create(layers: LAYERS).direction(args.state.direction).render,
-    Arrows.create(size: 200, active_alpha: 50, inactive_alpha: 22).render(args.state.tick_count, keys: args.inputs.keyboard.key_down)
+    # Renders the parallax
+    Parallax
+    .create(layers: LAYERS)
+    .direction(args.state.direction)
+    .render,
+
+    # Renders the arrow keys feedback visual
+    Arrows
+    .create(size: 200, active_alpha: 50, inactive_alpha: 22)
+    .render(args.state.tick_count, keys: args.inputs.keyboard.key_down)
   ]
 end
