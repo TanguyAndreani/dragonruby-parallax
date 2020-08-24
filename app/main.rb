@@ -6,6 +6,8 @@ LAYERS = [
     'layer5.png',
 ].map { |s| "assets/#{s}" }
 
+require 'lib/arrows.rb'
+
 def checkInput args
     if args.inputs.keyboard.key_held.left
         args.state.direction = 1
@@ -35,7 +37,8 @@ def tick args
     args.outputs.sprites << [
       [x_coord - (w - 1), 0, w, h, f],
       [x_coord, 0, w, h, f],
-      [x_coord + (w - 1), 0, w, h, f]
+      [x_coord + (w - 1), 0, w, h, f],
+      Arrows.create(size: 200).render(key_held: args.inputs.keyboard.key_held)
     ]
   end
 end
