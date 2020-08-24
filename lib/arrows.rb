@@ -25,7 +25,7 @@ class Arrows
         path: SPRITE,
         flip_horizontally: true,
         a: @inactive_alpha
-      },
+      }.sprite,
       right: {
         w: size,
         h: size,
@@ -33,13 +33,16 @@ class Arrows
         y: h/2 - size/2,
         path: SPRITE,
         a: @inactive_alpha
-      },
+      }.sprite,
     }
+    # so that we don't have to call it every time in Arrows#render
+    @sprites = @arrows.values
   end
 
-  DEFAULT_KEYHELD = Struct.new(:left, :right).new(nil, nil)
+  # imitates args.inputs.keyboard.key_*
+  DEFAULT_KEYS = Struct.new(:left, :right).new(nil, nil)
 
-  def render tick_count, keys: DEFAULT_KEYHELD
+  def render tick_count, keys: DEFAULT_KEYS
     [:left, :right].each do |sy|
       if keys.send(sy)
         @easings[sy].reset!
@@ -47,10 +50,6 @@ class Arrows
       @easings[sy].step! tick_count
       @arrows[sy][:a] = @easings[sy].current
     end
-
-    [
-      @arrows[:left].sprite,
-      @arrows[:right].sprite
-    ]
+    @sprites # == @arrows.values
   end
 end

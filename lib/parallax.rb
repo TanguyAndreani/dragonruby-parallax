@@ -11,9 +11,13 @@ class Parallax
     @layers = layers
     @speed = speed
     @direction = direction
+    @sprites = []
     @xs = []
-    layers.count.times do
+    layers.count.times do |i|
       @xs << 0
+      3.times do
+        @sprites << {x: 0, y: 0, w: @w, h: @h, path: layers[i]}.sprite
+      end
     end
     self
   end
@@ -23,18 +27,19 @@ class Parallax
     self
   end
 
+  def speed n
+    @speed = n
+    self
+  end
+
   def render
-    sprites = []
-    @layers.each_with_index do |f, layer|
-      break if @xs[layer].nil?
-      @xs[layer] -= @speed * (layer + 1) * @direction
-      x_coord = @xs[layer] % @w
-      sprites << [
-        [x_coord - (@w - 1), 0, @w, @h, f].sprite,
-        [x_coord, 0, @w, @h, f].sprite,
-        [x_coord + (@w - 1), 0, @w, @h, f].sprite,
-      ]
+    @layers.count.times do |i|
+      @xs[i] -= @speed * (i+1) * @direction
+      x_coord = @xs[i] % @w
+      @sprites[i*3+0][:x] = x_coord - (@w - 1)
+      @sprites[i*3+1][:x] = x_coord
+      @sprites[i*3+2][:x] = x_coord + (@w - 1)
     end
-    sprites
+    @sprites
   end
 end

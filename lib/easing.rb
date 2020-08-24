@@ -12,8 +12,9 @@ class EasingFn
 
   def step! tick_count
     @first_tick ||= tick_count
-    if tick_count-@first_tick < @time
-      @current = @from + @step*@direction*(tick_count-@first_tick)
+    diff = tick_count-@first_tick
+    if diff < @time
+      @current = @from + @step*@direction*diff
     end
   end
 
