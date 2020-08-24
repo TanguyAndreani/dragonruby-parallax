@@ -34,8 +34,8 @@ class Arrows
     @arrows[:right][:a] = key_held.right ? 30 : 10
 
     [
-      @arrows[:left],
-      @arrows[:right]
+      @arrows[:left].sprite,
+      @arrows[:right].sprite
     ]
   end
 end
