@@ -17,6 +17,7 @@ class EasingFn
     if diff <= @time
       @current = @from + @step*@direction*diff
     end
+    @current
   end
 
   def reset!
