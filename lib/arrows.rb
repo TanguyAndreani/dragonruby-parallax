@@ -42,7 +42,7 @@ class Arrows
   # imitates args.inputs.keyboard.key_*
   DEFAULT_KEYS = Struct.new(:left, :right).new(nil, nil)
 
-  def render tick_count, keys: DEFAULT_KEYS
+  def update tick_count, keys: DEFAULT_KEYS
     [:left, :right].each do |sy|
       if keys.send(sy)
         @easings[sy].reset!
@@ -50,6 +50,10 @@ class Arrows
       @easings[sy].step! tick_count
       @arrows[sy][:a] = @easings[sy].current
     end
-    @sprites # == @arrows.values
+    self
+  end
+
+  def render args, win
+    win.render_into args, @sprites # == @arrows.values
   end
 end

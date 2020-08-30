@@ -32,7 +32,7 @@ class Parallax
     self
   end
 
-  def render
+  def update
     @layers.count.times do |i|
       @xs[i] -= @speed * (i+1) * @direction
       x_coord = @xs[i] % @w
@@ -40,6 +40,10 @@ class Parallax
       @sprites[i*3+1][:x] = x_coord
       @sprites[i*3+2][:x] = x_coord + (@w - 1)
     end
-    @sprites
+    self
+  end
+
+  def render args, win
+    win.render_into args, @sprites
   end
 end

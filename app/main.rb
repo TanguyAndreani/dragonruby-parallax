@@ -1,5 +1,6 @@
 require 'lib/arrows.rb'
 require 'lib/parallax.rb'
+require 'lib/window.rb'
 
 LAYERS = [
   'layer1.png',
@@ -30,16 +31,20 @@ def tick args
   # sets args.state.direction
   checkInput args
 
-  args.outputs.primitives << [
-    # Renders the parallax
-    Parallax
-      .create(layers: LAYERS)
-      .direction(args.state.direction)
-      .render,
+  rootWindow ||= Window.new(name: :root)
 
-    # Renders the arrow keys feedback visual
-    Arrows
-      .create(size: 200, active_alpha: 50, inactive_alpha: 22)
-      .render(args.state.tick_count, keys: args.inputs.keyboard.key_down)
-  ]
+  # Renders the parallax
+  Parallax
+    .create(layers: LAYERS)
+    .direction(args.state.direction)
+    .update
+    .render args, rootWindow
+
+  # Renders the arrow keys feedback visual
+  Arrows
+    .create(size: 200, active_alpha: 50, inactive_alpha: 22)
+    .update(args.state.tick_count, keys: args.inputs.keyboard.key_down)
+    .render args, rootWindow
+
+  rootWindow.render args
 end
