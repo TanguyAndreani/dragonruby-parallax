@@ -1,4 +1,5 @@
 require 'lib/easing.rb'
+require 'lib/window.rb'
 
 class Arrows
   SPRITE = 'assets/arrow.png'

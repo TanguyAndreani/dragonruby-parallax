@@ -1,3 +1,5 @@
+require 'lib/window.rb'
+
 class Parallax
   # singleton pattern
   def self.create *args
