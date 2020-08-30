@@ -3,16 +3,9 @@ class Window
     @args = args
   end
 
-  def self.add_window name: :root, w: 1280, h: 720, x: 0, y: 0
+  def self.add_window **args
     @windows ||= Hash.new
-    @windows[name] = Window.new(
-      name: name,
-      w: w,
-      h: h,
-      x: x,
-      y: y
-    )
-    @windows[name]
+    @windows[args[:name]] = Window.new args
   end
 
   def self.render name
