@@ -33,13 +33,13 @@ def tick args
   args.outputs.primitives << [
     # Renders the parallax
     Parallax
-    .create(layers: LAYERS)
-    .direction(args.state.direction)
-    .render,
+      .create(layers: LAYERS)
+      .direction(args.state.direction)
+      .render,
 
     # Renders the arrow keys feedback visual
     Arrows
-    .create(size: 200, active_alpha: 50, inactive_alpha: 22)
-    .render(args.state.tick_count, keys: args.inputs.keyboard.key_down)
+      .create(size: 200, active_alpha: 50, inactive_alpha: 22)
+      .render(args.state.tick_count, keys: args.inputs.keyboard.key_down)
   ]
 end
