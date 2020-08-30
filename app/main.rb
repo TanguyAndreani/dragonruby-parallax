@@ -1,6 +1,7 @@
 require 'lib/arrows.rb'
 require 'lib/parallax.rb'
 require 'lib/window.rb'
+require 'lib/fps.rb'
 
 LAYERS = [
   'layer1.png',
@@ -29,7 +30,7 @@ end
 
 def setup args
   Window.set_args args
-  Window.add_window name: :root
+  Window.add name: :root
   args.state.setup_done = true
 end
 
@@ -53,4 +54,7 @@ def tick args
     .render_into :root
 
   Window.render :root
+
+  # Just a small helper to display FPS on top of everything
+  FPS.render_standalone :debug
 end

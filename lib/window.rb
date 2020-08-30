@@ -3,11 +3,6 @@ class Window
     @args = args
   end
 
-  def self.add_window **args
-    @windows ||= Hash.new
-    @windows[args[:name]] = Window.new args
-  end
-
   def self.render name
     @windows[name].render @args
   end
@@ -15,6 +10,21 @@ class Window
   def self.render_into name, sprites
     @windows[name].render_into @args, sprites
   end
+
+  def self.top_left name
+    [0, @windows[name].h]
+  end
+
+  def self.get_size name
+    [@windows[name].w, @windows[name].h]
+  end
+
+  def self.add **args
+    @windows ||= Hash.new
+    @windows[args[:name]] = self.new args
+  end
+
+  attr_reader :name, :w, :h, :x, :y
 
   def initialize name: :root, w: 1280, h: 720, x: 0, y: 0
     @name = name
@@ -32,7 +42,7 @@ class Window
   end
 
   def render_into args, sprites
-    args.render_target(@name).sprites << sprites
+    args.render_target(@name).primitives << sprites
   end
 
   def render args
