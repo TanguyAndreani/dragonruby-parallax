@@ -27,24 +27,30 @@ def checkInput args
   end
 end
 
+def setup args
+  Window.set_args args
+  Window.add_window name: :root
+  args.state.setup_done = true
+end
+
 def tick args
+  setup args unless args.state.setup_done
+
   # sets args.state.direction
   checkInput args
-
-  rootWindow ||= Window.new(name: :root)
 
   # Renders the parallax
   Parallax
     .create(layers: LAYERS)
     .direction(args.state.direction)
     .update
-    .render args, rootWindow
+    .render_into :root
 
   # Renders the arrow keys feedback visual
   Arrows
     .create(size: 200, active_alpha: 50, inactive_alpha: 22)
     .update(args.state.tick_count, keys: args.inputs.keyboard.key_down)
-    .render args, rootWindow
+    .render_into :root
 
-  rootWindow.render args
+  Window.render :root
 end

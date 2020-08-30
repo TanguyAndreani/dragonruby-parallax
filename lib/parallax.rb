@@ -43,7 +43,7 @@ class Parallax
     self
   end
 
-  def render args, win
-    win.render_into args, @sprites
+  def render_into win
+    Window.render_into win, @sprites
   end
 end

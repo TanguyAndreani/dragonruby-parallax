@@ -53,7 +53,7 @@ class Arrows
     self
   end
 
-  def render args, win
-    win.render_into args, @sprites # == @arrows.values
+  def render_into win
+    Window.render_into win, @sprites # == @arrows.values
   end
 end
