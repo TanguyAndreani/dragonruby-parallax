@@ -69,7 +69,6 @@ def tick args
   Window.render :root
   Window.render :minimap, from: :root
 
-
   # Just a small helper to display FPS on top of everything
   FPS.render_standalone :debug
 end

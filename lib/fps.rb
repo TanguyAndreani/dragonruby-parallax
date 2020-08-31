@@ -3,7 +3,7 @@ require 'lib/window.rb'
 class FPS
   # we do everything at once to make this easily copy pastable
   def self.render_standalone win
-    @window ||= Window.add name: win, y: 720-100, w: 200, h: 100
+    @window ||= Window.add name: win, y: 720-55, w: 145, h: 55
     x, y = Window.top_left win
     w, h = Window.get_size win
     Window.render_into win, [
