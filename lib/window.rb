@@ -13,15 +13,6 @@ class Window
     @viewport_ratio = Float(w).fdiv(h)
   end
 
-  def self.mouse_state
-    if @args.inputs.mouse.down
-      @mouse_state = :down
-    elsif @args.inputs.mouse.up
-      @mouse_state = :up
-    end
-    @mouse_state
-  end
-
   def self.set_focus
     if @args.inputs.mouse.down
       @current_focused = window_from_position @args.inputs.mouse.down.x, @args.inputs.mouse.down.y
@@ -37,7 +28,7 @@ class Window
 
   def self.move_window
     curr = @windows[@current_focused]
-    if mouse_state == :down && curr && curr.focusable
+    if Utils.mouse_state == :down && curr && curr.focusable
       curr.move_at @args.inputs.mouse.x - @focused_coordinaates[:x], @args.inputs.mouse.y - @focused_coordinaates[:y]
 
 

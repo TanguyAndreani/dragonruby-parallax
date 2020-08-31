@@ -32,6 +32,7 @@ end
 
 def setup args
   Window.set_args args
+  Utils.set_args args
   Window.set_screen_size 1280, 720
   Window.add_lock_point :somewhere, 200, 200
   Window.add_lock_point :left, 0, nil
