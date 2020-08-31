@@ -46,6 +46,14 @@ class Window
   end
 
   def render args
-    args.outputs.sprites << [@x, @y, @w, @h, @name]
+    args.outputs.sprites << {
+      x: @x,
+      y: @y,
+      w: w,
+      h: h,
+      source_w: w,
+      source_h: h,
+      path: @name
+    }
   end
 end
