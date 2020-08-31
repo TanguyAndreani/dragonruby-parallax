@@ -26,7 +26,8 @@ class Window
 
   attr_reader :name, :w, :h, :x, :y
 
-  def initialize name: :root, w: 1280, h: 720, x: 0, y: 0
+  def initialize name: :root, w: 1280, h: 720, x: 0, y: 0, shrink: false
+    @shrink = shrink
     @name = name
     @w, @h = w, h
     @x, @y = x, y
@@ -51,8 +52,8 @@ class Window
       y: @y,
       w: w,
       h: h,
-      source_w: w,
-      source_h: h,
+      source_w: @shrink ? nil : w,
+      source_h: @shrink ? nil : h,
       path: @name
     }
   end

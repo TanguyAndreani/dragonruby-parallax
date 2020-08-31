@@ -56,5 +56,6 @@ class Arrows
 
   def render_into win
     Window.render_into win, @sprites # == @arrows.values
+    self
   end
 end

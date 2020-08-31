@@ -47,5 +47,6 @@ class Parallax
 
   def render_into win
     Window.render_into win, @sprites
+    self
   end
 end
