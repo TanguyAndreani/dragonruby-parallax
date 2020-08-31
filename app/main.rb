@@ -40,7 +40,8 @@ def setup args
     y: 720-720*minimap_relative_size,
     w: 1280*minimap_relative_size,
     h: 720*minimap_relative_size,
-    shrink: true
+    shrink: true,
+    draggable: true
   )
 
   args.state.setup_done = true

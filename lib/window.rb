@@ -26,7 +26,8 @@ class Window
 
   attr_reader :name, :w, :h, :x, :y
 
-  def initialize name: :root, w: 1280, h: 720, x: 0, y: 0, shrink: false
+  def initialize name: :root, w: 1280, h: 720, x: 0, y: 0, shrink: false, draggable: false
+    @draggable = draggable
     @shrink = shrink
     @name = name
     @w, @h = w, h
