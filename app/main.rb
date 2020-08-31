@@ -59,14 +59,14 @@ def tick args
     .direction(args.state.direction)
     .update
     .render_into(:root)
-    .render_into :minimap
+    .render_into(:minimap)
 
   # Renders the arrow keys feedback visual
   Arrows
     .create(size: 200, active_alpha: 50, inactive_alpha: 22)
     .update(args.state.tick_count, keys: args.inputs.keyboard.key_down)
     .render_into(:root)
-    .render_into :minimap
+    .render_into(:minimap)
 
   Window.render :root
   Window.render :minimap
