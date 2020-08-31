@@ -1,3 +1,5 @@
+$gtk.reset
+
 require 'lib/window.rb'
 
 class Parallax

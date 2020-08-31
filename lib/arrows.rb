@@ -1,3 +1,5 @@
+$gtk.reset
+
 require 'lib/easing.rb'
 require 'lib/window.rb'
 

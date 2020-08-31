@@ -1,3 +1,5 @@
+$gtk.reset
+
 require 'lib/arrows.rb'
 require 'lib/parallax.rb'
 require 'lib/window.rb'
@@ -30,18 +32,23 @@ end
 
 def setup args
   Window.set_args args
+  Window.set_screen_size 1280, 720
+  Window.add_lock_point :somewhere, 200, 200
+  Window.add_lock_point :left, 0, nil
+  Window.add_lock_point :right, 1280, nil
+  Window.add_lock_point :bottom, nil, 0
+  Window.add_lock_point :top, nil, 720
   Window.add name: :root
-
-  minimap_relative_size = 0.2
 
   Window.add(
     name: :minimap,
-    x: 1280-1280*minimap_relative_size,
-    y: 720-720*minimap_relative_size,
-    w: 1280*minimap_relative_size,
-    h: 720*minimap_relative_size,
+    w: 200,
+    position: :top_right,
     shrink: true,
-    draggable: true
+    draggable: true,
+    focusable: true,
+    margin_left: -10,
+    margin_top: 10
   )
 
   args.state.setup_done = true
@@ -68,6 +75,9 @@ def tick args
 
   Window.render :root
   Window.render :minimap, from: :root
+
+  Window.set_focus
+  Window.move_window
 
   # Just a small helper to display FPS on top of everything
   FPS.render_standalone :debug

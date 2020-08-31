@@ -1,3 +1,5 @@
+$gtk.reset
+
 class EasingFn
   attr_reader :current
 
