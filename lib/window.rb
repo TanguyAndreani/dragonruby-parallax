@@ -3,8 +3,8 @@ class Window
     @args = args
   end
 
-  def self.render name
-    @windows[name].render @args
+  def self.render name, from: nil
+    @windows[name].render @args, from: from
   end
 
   def self.render_into name, sprites
@@ -47,7 +47,7 @@ class Window
     args.render_target(@name).primitives << sprites
   end
 
-  def render args
+  def render args, from: nil
     args.outputs.sprites << {
       x: @x,
       y: @y,
@@ -55,7 +55,7 @@ class Window
       h: h,
       source_w: @shrink ? nil : w,
       source_h: @shrink ? nil : h,
-      path: @name
+      path: from || @name
     }
   end
 end
