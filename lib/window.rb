@@ -63,11 +63,11 @@ class Window
 
         select_lock_proc = proc do |k, v|
           focused_window.corners.each do |_, pt|
-            v_distance = Utils.distance(pt, v) if nearest_lockpoint
+            v_distance = Vector2d.distance(pt, v) if nearest_lockpoint
             if !nearest_lockpoint || v_distance < acc_distance
               nearest_lockpoint = v
               nearest_corner = pt
-              acc_distance = Utils.distance(nearest_corner, nearest_lockpoint)
+              acc_distance = Vector2d.distance(nearest_corner, nearest_lockpoint)
             end
           end
         end
@@ -139,15 +139,22 @@ class Window
   end
 
   def self.filter_add_args args
+
+    # default values for width/height
+
+    # viewport size if nothing was provided
     if args[:w].nil? && args[:h].nil?
       args[:w] = @viewport_w
       args[:h] = @viewport_h
+    # if either width or height is missing, compute the other based on given
+    # ratio, if no ration was provided, use viewport's ratio
     elsif args[:w].nil? && args[:h]
       args[:w] = args[:h] * (args[:ratio] || @viewport_ratio)
     elsif args[:w] && args[:h].nil?
       args[:h] = args[:w] / (args[:ratio] || @viewport_ratio)
     end
 
+    # if `position` was provided, parse it and overwrite x and y
     unless args[:position].nil?
       position = args[:position].to_s.split('_').map(&:to_sym)
 
@@ -170,15 +177,20 @@ class Window
       end
     end
 
+    # if neither position nor x and y where provided, default to zero
     args[:x] ||= 0
     args[:y] ||= 0
 
-    args[:focusable] ||= false
-
-    args[:corners] = Utils.corners(args)
-
+    # we add margins now, but we'll never use them again
     args[:x] += args[:margin_left] if args[:margin_left]
     args[:y] -= args[:margin_top] if args[:margin_top]
+
+    # compute corners coordinates, then updated on each call to move_at()
+    args[:corners] = Utils.corners(args)
+
+    # interactions
+    args[:focusable] ||= false
+    args[:draggable] ||= false
   end
 
   def self.add **args

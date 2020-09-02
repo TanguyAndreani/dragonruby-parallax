@@ -3,16 +3,6 @@ class Utils
     @args = args
   end
 
-  def self.distance a, b
-    if a[:x] && b[:x] && a[:y] && b[:y]
-      Math.sqrt((b[:x]-a[:x]).abs**2 + (b[:y]-a[:y]).abs**2)
-    elsif a[:x].nil? || b[:x].nil?
-      (b[:y]-a[:y]).abs
-    else
-      (b[:x]-a[:x]).abs
-    end
-  end
-
   def self.corners rect
     {
       bottom_left: {x: rect[:x], y: rect[:y]},
