@@ -3,24 +3,37 @@ class Utils
     @args = args
   end
 
-  def self.distance x1, y1, x2, y2
-    if x1 && x2 && y1 && y2
-      Math.sqrt((x2-x1).abs**2 + (y2-y1).abs**2)
-    elsif x1.nil? || x2.nil?
-      (y2-y1).abs
+  def self.distance a, b
+    if a[:x] && b[:x] && a[:y] && b[:y]
+      Math.sqrt((b[:x]-a[:x]).abs**2 + (b[:y]-a[:y]).abs**2)
+    elsif a[:x].nil? || b[:x].nil?
+      (b[:y]-a[:y]).abs
     else
-      (x2-x1).abs
+      (b[:x]-a[:x]).abs
     end
   end
 
-  def self.corners **rect
-    [
-      {x: rect[:x], y: rect[:y]},
-      {x: rect[:x]+rect[:w], y: rect[:y]},
-      {x: rect[:x], y: rect[:y]+rect[:h]},
-      {x: rect[:x]+rect[:w], y: rect[:y]+rect[:h]},
-    ]
+  def self.corners rect
+    {
+      bottom_left: {x: rect[:x], y: rect[:y]},
+      bottom_right: {x: rect[:x]+rect[:w], y: rect[:y]},
+      top_left: {x: rect[:x], y: rect[:y]+rect[:h]},
+      top_right: {x: rect[:x]+rect[:w], y: rect[:y]+rect[:h]},
+      #center: {x: (rect[:x]*2+rect[:w])/2, y: (rect[:y]*2+rect[:h])/2}
+    }
   end
+
+  def self.get_stub name
+    @stubs ||= Hash.new(0)
+    @stubs[name]
+  end
+
+  def self.set_stub name, value
+    @stubs ||= Hash.new(0)
+    @stubs[name] = value
+  end
+
+  set_stub :empty_hash, Hash.new(0)
 
   def self.mouse_state
     if @args.inputs.mouse.down
