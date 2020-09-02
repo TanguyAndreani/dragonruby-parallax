@@ -4,7 +4,6 @@ require 'lib/utils.rb'
 require 'lib/vector2d.rb'
 
 class Window
-  @lockpoints = Hash.new
   @locklines = Hash.new
   @lock_distance = 10
 
@@ -53,7 +52,7 @@ class Window
   end
 
   def self.move_to_closest_lock
-    if (@lockpoints.any? || @locklines.any?) && Utils.mouse_state == :down
+    if @locklines.any? && Utils.mouse_state == :down
       Window.with(@current_focused) do |focused_window|
         return if focused_window.nil?
 
@@ -61,7 +60,7 @@ class Window
         nearest_corner = nil
         acc_distance = nil
 
-        select_lock_proc = proc do |k, v|
+        @locklines.each do |k, v|
           focused_window.corners.each do |_, pt|
             v_distance = Vector2d.distance(pt, v) if nearest_lockpoint
             if !nearest_lockpoint || v_distance < acc_distance
@@ -71,9 +70,6 @@ class Window
             end
           end
         end
-
-        @lockpoints.each &select_lock_proc
-        @locklines.each &select_lock_proc
 
         focused_window.move_at({
           x: (nearest_lockpoint[:x] || focused_window[:x]) - (focused_window[:x] - nearest_corner[:x]).abs,
@@ -112,10 +108,6 @@ class Window
     else
       yield(nil)
     end
-  end
-
-  def self.add_lock_point name, x, y
-    @lockpoints[name] = {x: x, y: y}
   end
 
   def self.add_lock_line name, x, y
