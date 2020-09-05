@@ -31,17 +31,19 @@ def setup args
 
   Window.add name: :root
 
-  Window.add(
-    name: :minimap,
-    w: 200,
-    position: :top_right,
-    shrink: true,
-    draggable: true,
-    focusable: true,
-    collision: true,
-    margin_left: -10,
-    margin_top: 10
-  )
+  Platform.except :emscripten {
+    Window.add(
+      name: :minimap,
+      w: 200,
+      position: :top_right,
+      shrink: true,
+      draggable: true,
+      focusable: true,
+      collision: true,
+      margin_left: -10,
+      margin_top: 10
+    )
+  }
 
   args.state.setup_done = true
 end
@@ -56,18 +58,16 @@ def tick args
     .render_into(:root)
 
   # Renders the arrow keys feedback visual
-  Arrows
-    .create(size: 200, active_alpha: 50, inactive_alpha: 22)
-    .update
-    .render_into(:root)
+  Arrows.create(size: 200, active_alpha: 50, inactive_alpha: 22)
+  Platform.except :emscripten { Arrows.update }
+  Arrows.render_into(:root)
 
   Window.render :root
 
   Platform.except :emscripten {
     Window.render :minimap, from: :root
+    Window.mainloop
   }
-
-  Window.mainloop
 
   # Just a small helper to display FPS on top of everything
   FPS.render_standalone :debug
