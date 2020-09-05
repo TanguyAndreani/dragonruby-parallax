@@ -34,7 +34,7 @@ class Window
   def self.mainloop
     update_mouse_coords
     update_focus
-    update_drag
+    drag_focused_window
     move_to_closest_lock { |distance| distance < @lock_distance }
   end
 
@@ -61,7 +61,7 @@ class Window
   end
 
   # Move the focused window while you're dragging it with your mouse
-  def self.update_drag
+  def self.drag_focused_window
     if Utils.mouse_state == :down
       Window.with(@current_focused) do |focused_window|
         if focused_window && focused_window.focusable
