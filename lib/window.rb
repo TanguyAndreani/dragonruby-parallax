@@ -7,19 +7,7 @@ class Window
   @locklines = Hash.new
   @lock_distance = 10
 
-  def self.mainloop
-    update_mouse_coords
-    update_focus
-    update_drag
-    move_to_closest_lock { |distance| distance < @lock_distance }
-  end
-
-  def self.update_mouse_coords
-    @mouse = {
-      x: @args.inputs.mouse.x,
-      y: @args.inputs.mouse.y
-    }
-  end
+  # SETUP METHODS BEGIN
 
   def self.set_args args
     @args = args
@@ -35,6 +23,27 @@ class Window
     @viewport_ratio = w/h
   end
 
+  def self.add_lock_line name, x, y
+    @locklines[name] = Vector2d.create x, y
+  end
+
+  # SETUP METHODS END
+
+  # MAINLOOP METHODS BEGIN
+
+  def self.mainloop
+    update_mouse_coords
+    update_focus
+    update_drag
+    move_to_closest_lock { |distance| distance < @lock_distance }
+  end
+
+  # On each call, store the mouse position
+  def self.update_mouse_coords
+    @mouse = Vector2d.create @args.inputs.mouse.x, @args.inputs.mouse.y
+  end
+
+  # Change focused window when you click somewhere
   def self.update_focus
     if @args.inputs.mouse.click
       w = window_from_position @mouse
@@ -51,6 +60,19 @@ class Window
     @current_focused
   end
 
+  # Move the focused window while you're dragging it with your mouse
+  def self.update_drag
+    if Utils.mouse_state == :down
+      Window.with(@current_focused) do |focused_window|
+        if focused_window && focused_window.focusable
+          focused_window.move_at Vector2d.diff(@mouse, @focused_coords)
+        end
+      end
+    end
+  end
+
+  # Move the currently focused window to the nearest lockline if it is closer than
+  # some value that you can specify in a block (See mainloop)
   def self.move_to_closest_lock
     if @locklines.any? && Utils.mouse_state == :down
       Window.with(@current_focused) do |focused_window|
@@ -71,23 +93,18 @@ class Window
           end
         end
 
-        focused_window.move_at({
-          x: (nearest_lockpoint[:x] || focused_window[:x]) - (focused_window[:x] - nearest_corner[:x]).abs,
-          y: (nearest_lockpoint[:y] || focused_window[:y]) - (focused_window[:y] - nearest_corner[:y]).abs
-        }) if block_given? && yield(acc_distance)
+        focused_window.move_at(Vector2d.create(
+          (nearest_lockpoint[:x] || focused_window[:x]) - (focused_window[:x] - nearest_corner[:x]).abs,
+          (nearest_lockpoint[:y] || focused_window[:y]) - (focused_window[:y] - nearest_corner[:y]).abs
+        )) if block_given? && yield(acc_distance)
       end
     end
   end
 
-  def self.update_drag
-    if Utils.mouse_state == :down
-      Window.with(@current_focused) do |focused_window|
-        if focused_window && focused_window.focusable
-          focused_window.move_at Vector2d.diff(@mouse, @focused_coords)
-        end
-      end
-    end
-  end
+  # MAINLOOP METHODS END
+
+  # HELPERS BEGIN
+  # Typically, you wouldn't need to call those functions.
 
   def self.window_from_position **args
     @windows.each do |k, v|
@@ -98,6 +115,14 @@ class Window
     nil
   end
 
+  # HELPERS END
+
+  # MISC METHODS BEGIN
+
+  # Usage:
+  #   Window.with(name) do |window_object|
+  #     puts "#{name}'s size: #{window_object[:w]}x#{window_object[:h]}"
+  #   end
   def self.with name
     if name && @windows[name]
       if block_given?
@@ -110,26 +135,54 @@ class Window
     end
   end
 
-  def self.add_lock_line name, x, y
-    @locklines[name] = {x: x, y: y}
-  end
-
+  # Render the window on screen.
+  # The from arguments allow to render the render target of another window inside the window `name`
   def self.render name, from: nil
     @windows[name].render @args, from: from
   end
 
+  # Render sprites into the window, args.render_target(name).primitives.
+  # It means that you need to use .sprite, .label, .solid, .border... on all of your sprites.
+  # `sprites` can be a single sprite or an array.
   def self.render_into name, sprites
     @windows[name].render_into @args, sprites
   end
 
-  def self.top_left name
-    [0, @windows[name].h]
+  # MISC METHODS END
+
+  # WINDOW CREATION METHODS BEGIN
+
+  # Use that to create a new window:
+  # Example:
+  #   winName = :the_name_of_the_window
+  #
+  #   Window.add(
+  #     name: winName,
+  #     w: 145,
+  #     h: 55,
+  #     position: :top_left,
+  #     focusable: true,
+  #     draggable: true
+  #   )
+  #
+  #   ...
+  #
+  #   Window.render_into(
+  #     winName, [
+  #       [0, Window.with(winName).h, "Hello, World!", 7].label,
+  #       [0, 0, Window.with(winName).w, Window.with(winName).h, 0, 0, 0].solid
+  #     ]
+  #   )
+  #
+  #   Window.render winName
+  def self.add **args
+    @windows ||= Hash.new
+    filter_add_args args
+    @windows[args[:name]] = self.new args
+    self
   end
 
-  def self.get_size name
-    [@windows[name].w, @windows[name].h]
-  end
-
+  # This is just a helper for Window.add, don't call it directly.
   def self.filter_add_args args
 
     # default values for width/height
@@ -185,12 +238,10 @@ class Window
     args[:draggable] ||= false
   end
 
-  def self.add **args
-    @windows ||= Hash.new
-    filter_add_args args
-    @windows[args[:name]] = self.new args
-    self
-  end
+  # WINDOW CREATION METHODS END
+
+  # WINDOW METHODS BEGIN
+  # You don't need to call those directly
 
   def initialize args
     args.each { |k, v|
@@ -198,14 +249,6 @@ class Window
       Window.send(:attr_reader, k)
     }
     self
-  end
-
-  def [](attr)
-    instance_variable_get(:"@#{attr}")
-  end
-
-  def []=(attr, value)
-    instance_variable_set(:"@#{attr}", value)
   end
 
   def move_at coords
@@ -228,5 +271,17 @@ class Window
       source_h: @shrink ? nil : h,
       path: from || @name
     }
+  end
+
+  # WINDOW METHODS END
+
+  # HASH COMPATIBILITY METHODS BEGIN
+
+  def [](attr)
+    instance_variable_get(:"@#{attr}")
+  end
+
+  def []=(attr, value)
+    instance_variable_set(:"@#{attr}", value)
   end
 end

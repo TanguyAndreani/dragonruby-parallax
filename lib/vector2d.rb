@@ -24,4 +24,11 @@ class Vector2d
       (b[:x]-a[:x]).abs
     end
   end
+
+  def self.create x, y
+    {
+      x: x,
+      y: y
+    }
+  end
 end
