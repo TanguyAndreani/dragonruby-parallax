@@ -1,9 +1,11 @@
 # A simple parallax with DragonRuby
 
+![Play on Itch.io](https://lmbdfn.itch.io/dragonruby-parallax)
+
 So this is my first try at DragonRuby. I tried to make a parallax, which
 I already did for a game with CSFML.
 
-![](./screencast.gif)
+![](./screenshot.jpg)
 
 *Sorry for the recording quality. The parallax looks way better than that.*
 
