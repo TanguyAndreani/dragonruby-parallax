@@ -4,6 +4,7 @@ require 'lib/arrows.rb'
 require 'lib/parallax.rb'
 require 'lib/window.rb'
 require 'lib/fps.rb'
+require 'lib/platform.rb'
 
 LAYERS = [
   'layer1.png',
@@ -14,6 +15,8 @@ LAYERS = [
 ].map { |s| "assets/#{s}" }
 
 def setup args
+  Platform.set
+
   Window.set_args args
   Utils.set_args args
   Arrows.set_args args
@@ -59,7 +62,10 @@ def tick args
     .render_into(:root)
 
   Window.render :root
-  Window.render :minimap, from: :root
+
+  Platform.except :emscripten {
+    Window.render :minimap, from: :root
+  }
 
   Window.mainloop
 

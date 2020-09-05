@@ -1,4 +1,4 @@
-devid=soykaf
+devid=lmbdfn
 devtitle=Tanguy Andreani
 gameid=dragonruby-parallax
 gametitle=A simple DragonRuby parallax
